@@ -12,6 +12,7 @@ import RegisterPage from "./pages/registerPage.vue";
 import ThanksJoinPage from "./pages/thanksJoinPage.vue";
 import SharePage from "./pages/sharePage.vue";
 import IntroducingPage from "./pages/introducingPage.vue";
+import PapPage from "./pages/papPage.vue";
 
 const routes = [
   { path: "/", component: HomePage },
@@ -22,6 +23,7 @@ const routes = [
   { path: "/joined", component: ThanksJoinPage },
   { path: "/share", component: SharePage },
   { path: "/page/:page", component: ConstructPage },
+  { path: "/pap", component: PapPage },
 ];
 
 export const router = createRouter({

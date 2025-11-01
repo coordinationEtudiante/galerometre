@@ -37,5 +37,8 @@
   "share-sms-link": "hello, j'ai fait un formulaire qui permet d'evaluer la precarité etudiante, j'ai obtenu {n}% de precarité pour un precariscore {p} 😱, fait le test et donne moi ton resultat 🤗",
   "start-form": "Démarrer le questionnaire",
   "thank-presentation": "Nous défendons les étudiant·e·s au quotidien, mais pour cela plus nous avons de chiffres plus on pourra visibiliser la hess des étudiants. Ce formulaire nous est très précieux 🤗",
-  "trueFalse.aprobation": "oui"
+  "trueFalse.aprobation": "oui",
+  "error-form-is-not-compete": "Erreur, vous devez remplir le formulaire",
+  "error-form-not-competed-description": "Pour pouvoir acceder a cette page, vous devez finir le formulaire a 100%, revenez plus tard.",
+  "compete-form": "competer le formualire"
 }
