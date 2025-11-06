@@ -38,7 +38,16 @@
   "start-form": "Démarrer le questionnaire",
   "thank-presentation": "Nous défendons les étudiant·e·s au quotidien, mais pour cela plus nous avons de chiffres plus on pourra visibiliser la hess des étudiants. Ce formulaire nous est très précieux 🤗",
   "trueFalse.aprobation": "oui",
-  "error-form-is-not-compete": "Erreur, vous devez remplir le formulaire",
-  "error-form-not-competed-description": "Pour pouvoir acceder a cette page, vous devez finir le formulaire a 100%, revenez plus tard.",
-  "compete-form": "competer le formualire"
+  "error-is-not-connected": "Erreur, vous n'avez pas encors de compte.",
+  "error-not-connected-description": "cella est sans doute car vous n'avez pas fini le formulaire",
+  "error-is-not-activist": "Erreur, vous devez etre engagé pour acceder a cette page",
+  "error-not-activist-description": "C'est une page reserver au personne ayant demander a etre engagé dans cette campagne...",
+  "becam-activist": "Devenir engagé",
+  "welcome-in-pap": "Bienvenu en porte a porte",
+  "welcome-in-pap-description": "Ici tu peut géré et crée des qrcode pour toute les ocasion ou cella est nessaisaire. le porte a porte de ce soir par exemple 🤗",
+  "authenticate-from": "tu est identifier comme {name} {lastname} ({id})",
+  "new-qr-code-label": "motif du nouveau qrcode",
+  "new-qr-code-help": "un texte qui nous poermetera de savoir ou a été completé ces formulaire",
+  "new-qr-code-placeholder": "ma résidence",
+  "create-new-invitation-link": "crée un nouveau lien d'invitation"
 }
