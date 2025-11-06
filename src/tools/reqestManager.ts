@@ -16,6 +16,17 @@ class RequestManager {
     afiliation: string | undefined;
   };
 
+  private customQR: Array<{
+    id: string;
+    location: string;
+    email: string;
+    phone: string;
+    name: string;
+    lastname: string;
+    activist: true;
+    afiliation: string;
+    reason: string;
+  }> = [];
   link: string;
 
   private dependencyQuestion: Array<{
@@ -51,7 +62,8 @@ class RequestManager {
     };
 
     this.updateUser(JSON.parse(window.localStorage.getItem("user") ?? "{}"));
-
+    this.customQR =
+      JSON.parse(window.localStorage.getItem("customQR") ?? "[]") ?? [];
     this.link =
       import.meta.env.VITE_API_URL ?? "https://api.precariscore.qamp.fr";
   }
@@ -309,8 +321,56 @@ class RequestManager {
     return JSON.parse(JSON.parse(request.responseText));
   }
 
+  createCustomQrcode(reason: string) {
+    if (
+      this.user.location === undefined ||
+      this.user.email === undefined ||
+      this.user.phone === undefined ||
+      this.user.name === undefined ||
+      this.user.lastname === undefined ||
+      this.user.afiliation === undefined
+    ) {
+      return false;
+    }
+
+    const qrUID = uid();
+    this.customQR.push({
+      location: this.user.location,
+      email: this.user.email,
+      phone: this.user.phone,
+      name: this.user.name,
+      lastname: this.user.lastname,
+      afiliation: this.user.afiliation,
+      activist: true,
+      id: qrUID,
+      reason,
+    });
+
+    window.localStorage.setItem("customQR", JSON.stringify(this.customQR));
+
+    return qrUID;
+  }
+
   getId() {
     return this.user.id;
+  }
+
+  getActivist() {
+    return this.user.activist;
+  }
+
+  getName() {
+    return this.user.name;
+  }
+
+  getLasname() {
+    console.log(this.user);
+    return this.user.lastname;
+  }
+
+  getCustomQR() {
+    console.log(this.customQR);
+    return this.customQR;
   }
 
   private updateUser(obj: Record<string, string>) {
