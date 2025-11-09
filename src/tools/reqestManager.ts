@@ -2,6 +2,7 @@
 
 import type { pageType } from "@/types/request";
 import { getLocalResponse, uid } from "./jsTools";
+import { ref } from "vue";
 
 class RequestManager {
   private static instance: RequestManager;
@@ -16,17 +17,19 @@ class RequestManager {
     afiliation: string | undefined;
   };
 
-  private customQR: Array<{
-    id: string;
-    location: string;
-    email: string;
-    phone: string;
-    name: string;
-    lastname: string;
-    activist: true;
-    afiliation: string;
-    reason: string;
-  }> = [];
+  private customQR = ref<
+    Array<{
+      id: string;
+      location: string;
+      email: string;
+      phone: string;
+      name: string;
+      lastname: string;
+      activist: true;
+      afiliation: string;
+      reason: string;
+    }>
+  >([]);
   link: string;
 
   private dependencyQuestion: Array<{
@@ -62,7 +65,7 @@ class RequestManager {
     };
 
     this.updateUser(JSON.parse(window.localStorage.getItem("user") ?? "{}"));
-    this.customQR =
+    this.customQR.value =
       JSON.parse(window.localStorage.getItem("customQR") ?? "[]") ?? [];
     this.link =
       import.meta.env.VITE_API_URL ?? "https://api.precariscore.qamp.fr";
@@ -327,26 +330,35 @@ class RequestManager {
       this.user.email === undefined ||
       this.user.phone === undefined ||
       this.user.name === undefined ||
-      this.user.lastname === undefined ||
-      this.user.afiliation === undefined
+      this.user.lastname === undefined
     ) {
+      console.log(
+        this.user.location === undefined,
+        this.user.email === undefined,
+        this.user.phone === undefined,
+        this.user.name === undefined,
+        this.user.lastname === undefined
+      );
       return false;
     }
 
     const qrUID = uid();
-    this.customQR.push({
+    this.customQR.value.push({
       location: this.user.location,
       email: this.user.email,
       phone: this.user.phone,
       name: this.user.name,
       lastname: this.user.lastname,
-      afiliation: this.user.afiliation,
+      afiliation: this.user.id,
       activist: true,
       id: qrUID,
       reason,
     });
 
-    window.localStorage.setItem("customQR", JSON.stringify(this.customQR));
+    window.localStorage.setItem(
+      "customQR",
+      JSON.stringify(this.customQR.value)
+    );
 
     return qrUID;
   }
@@ -368,8 +380,7 @@ class RequestManager {
     return this.user.lastname;
   }
 
-  getCustomQR() {
-    console.log(this.customQR);
+  getCustomQRs() {
     return this.customQR;
   }
 

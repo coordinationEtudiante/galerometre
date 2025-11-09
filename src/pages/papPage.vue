@@ -1,5 +1,4 @@
 <template>
-  {{ lastName }}
   <div
     v-if="
       customQR === undefined ||
@@ -7,6 +6,7 @@
       lastName === undefined ||
       id === undefined
     "
+    class="errored"
   >
     <h1 class="underline">{{ t("error-is-not-connected") }}</h1>
     <div>
@@ -21,12 +21,18 @@
       <UiLink to="/joined">{{ t("becam-activist") }}</UiLink>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="page">
     <h1>{{ t("welcome-in-pap") }}</h1>
     <div>{{ t("welcome-in-pap-description") }}</div>
     <div>{{ t("authenticate-from", { name, lastName, id }) }}</div>
-    <ul v-if="customQR.length > 0">
-      <li v-for="qr in customQR" :key="qr.id">
+  </div>
+  <div class="page">
+    <ul v-if="customQRs.length > 0" class="qrList">
+      <li
+        v-for="qr in customQRs"
+        :key="qr.id"
+        :class="{ selected: selectedQr?.id == qr.id }"
+      >
         <span>{{ qr.reason }}</span>
         <span>{{ qr.id }}</span>
       </li>
@@ -36,9 +42,21 @@
       :label="t('new-qr-code-label')"
       :help="t('new-qr-code-help')"
       :placeholder="t('new-qr-code-placeholder')"
-      @input="(r) => (newQrCodeReason = r)"
+      @input="(r: string) => (newQrCodeReason = r)"
     />
-    <UiLink>{{ t("create-new-invitation-link") }}</UiLink>
+    <UiLink
+      :onclick="createNewLink"
+      :active="newQrCodeReason != undefined && newQrCodeReason != ''"
+    >
+      {{ t("create-new-invitation-link") }}
+    </UiLink>
+  </div>
+  <div class="page" v-if="selectedQr">
+    <div>{{ t("your-qr-code", { reason: selectedQr.reason }) }}</div>
+    <img
+      :src="qrcode"
+      :alt="`https://precariscore.qamp.fr/#/${selectedQr.id}`"
+    />
   </div>
 </template>
 
@@ -46,23 +64,55 @@
 import FormInput from "@/components/formElement/FormInput.vue";
 import UiLink from "@/components/ui/uiLink.vue";
 import reqestManager from "@/tools/reqestManager";
-import { computed, ref } from "vue";
+import { useQRCode } from "@vueuse/integrations/useQRCode.mjs";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
-const customQR = computed(() => reqestManager.getCustomQR());
+const qrcode = useQRCode(
+  `https://precariscore.qamp.fr/#/${reqestManager.getId()}`
+);
+const customQRs = reqestManager.getCustomQRs();
 const id = computed(() => reqestManager.getId());
 const isActivist = computed(() => reqestManager.getActivist());
 const lastName = computed(() => reqestManager.getLasname());
 const name = computed(() => reqestManager.getName());
 
 const newQrCodeReason = ref("");
+const selectedQr = ref<
+  | {
+      id: string;
+      location: string;
+      email: string;
+      phone: string;
+      name: string;
+      lastname: string;
+      activist: true;
+      afiliation: string;
+      reason: string;
+    }
+  | undefined
+>();
+
+onMounted(() => {
+  console.log(customQRs);
+  if (customQRs.value && customQRs.value.length > 1)
+    selectedQr.value = customQRs.value[0];
+});
+
+function createNewLink() {
+  //mabye handle error
+  reqestManager.createCustomQrcode(newQrCodeReason.value);
+}
 </script>
 
 <style scoped lang="scss">
 .errored {
-  padding: 1em;
+  margin: 2vh;
+  padding: 2vh;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: white;
+
   .underline {
     text-decoration-line: underline;
     text-decoration-thickness: 4px;
@@ -74,6 +124,44 @@ const newQrCodeReason = ref("");
     align-items: center;
     flex-direction: column;
     gap: 2em;
+  }
+}
+
+.page {
+  margin: 2vh;
+  padding: 2vh;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+
+  .qrList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 0;
+
+    li {
+      border: 1px solid silver;
+      color: gray;
+      padding: 10px;
+      display: flex;
+      gap: 1em;
+
+      span:nth-child(2) {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      &.selected {
+        background-color: black;
+        color: white;
+      }
+    }
   }
 }
 </style>
