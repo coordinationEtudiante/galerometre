@@ -376,7 +376,6 @@ class RequestManager {
   }
 
   getLasname() {
-    console.log(this.user);
     return this.user.lastname;
   }
 

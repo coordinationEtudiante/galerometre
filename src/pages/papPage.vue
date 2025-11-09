@@ -116,7 +116,7 @@ onMounted(() => {
 });
 
 function createNewLink() {
-  //mabye handle error
+  //maybe handle error
   reqestManager.createCustomQrcode(newQrCodeReason.value);
 }
 </script>
