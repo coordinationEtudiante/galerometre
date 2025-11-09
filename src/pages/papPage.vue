@@ -108,7 +108,6 @@ const qrUrl = computed(() =>
 const qrcode = useQRCode(qrUrl);
 
 onMounted(() => {
-  console.log(customQRs);
   if (customQRs.value && customQRs.value.length > 1)
     selectedQr.value = customQRs.value[0];
 });
@@ -121,10 +120,14 @@ function createNewLink() {
 
 <style scoped lang="scss">
 .errored {
-  margin: 2vh;
-  padding: 2vh;
+  margin: 1em 2vh;
+  padding: 2em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   background-color: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
 
   .underline {
     text-decoration-line: underline;
