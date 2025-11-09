@@ -1,11 +1,6 @@
 <template>
   <div
-    v-if="
-      customQR === undefined ||
-      name === undefined ||
-      lastName === undefined ||
-      id === undefined
-    "
+    v-if="name === undefined || lastName === undefined || id === undefined"
     class="errored"
   >
     <h1 class="underline">{{ t("error-is-not-connected") }}</h1>
@@ -32,6 +27,11 @@
         v-for="qr in customQRs"
         :key="qr.id"
         :class="{ selected: selectedQr?.id == qr.id }"
+        :onclick="
+          () => {
+            selectedQr = qr;
+          }
+        "
       >
         <span>{{ qr.reason }}</span>
         <span>{{ qr.id }}</span>
@@ -51,7 +51,15 @@
       {{ t("create-new-invitation-link") }}
     </UiLink>
   </div>
-  <div class="page" v-if="selectedQr">
+  <div
+    class="page"
+    v-if="
+      selectedQr &&
+      name !== undefined &&
+      lastName !== undefined &&
+      id !== undefined
+    "
+  >
     <div>{{ t("your-qr-code", { reason: selectedQr.reason }) }}</div>
     <img
       :src="qrcode"
@@ -69,9 +77,7 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const qrcode = useQRCode(
-  `https://precariscore.qamp.fr/#/${reqestManager.getId()}`
-);
+
 const customQRs = reqestManager.getCustomQRs();
 const id = computed(() => reqestManager.getId());
 const isActivist = computed(() => reqestManager.getActivist());
@@ -93,6 +99,13 @@ const selectedQr = ref<
     }
   | undefined
 >();
+
+const qrUrl = computed(() =>
+  selectedQr.value !== undefined
+    ? `https://precariscore.qamp.fr/#/${selectedQr.value.id}`
+    : ""
+);
+const qrcode = useQRCode(qrUrl);
 
 onMounted(() => {
   console.log(customQRs);
@@ -128,8 +141,8 @@ function createNewLink() {
 }
 
 .page {
-  margin: 2vh;
-  padding: 2vh;
+  margin: 1em 2vh;
+  padding: 2em;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   background-color: white;
   border-radius: 15px;
