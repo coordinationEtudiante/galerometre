@@ -3,7 +3,7 @@
     v-if="to"
     :to
     class="ui-link"
-    :class="inline ? 'inline' : 'styled'"
+    :class="{ inline, styled: !inline, active }"
     @click="$emit('click')"
   >
     <slot />
@@ -12,7 +12,7 @@
     v-else-if="href"
     :href
     class="ui-link"
-    :class="inline ? 'inline' : 'styled'"
+    :class="{ inline, styled: !inline, active }"
     @click="$emit('click')"
   >
     <slot />
@@ -20,7 +20,7 @@
   <div
     v-else
     class="ui-link"
-    :class="inline ? 'inline' : 'styled'"
+    :class="{ inline, styled: !inline, active }"
     @click="$emit('click')"
   >
     <slot />
@@ -32,10 +32,12 @@ const {
   href,
   to,
   inline = false,
+  active = true,
 } = defineProps<{
   href?: string;
   to?: string;
   inline?: boolean;
+  active?: boolean;
 }>();
 
 defineEmits(["click"]);
@@ -48,7 +50,6 @@ defineEmits(["click"]);
 }
 
 .styled {
-  background-color: black;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -57,5 +58,13 @@ defineEmits(["click"]);
   border-radius: 10px;
   font-size: 1em;
   cursor: pointer;
+
+  &.active {
+    background-color: black;
+  }
+
+  &:not(.active) {
+    background-color: gray;
+  }
 }
 </style>

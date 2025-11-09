@@ -37,5 +37,18 @@
   "share-sms-link": "hello, j'ai fait un formulaire qui permet d'evaluer la precarité etudiante, j'ai obtenu {n}% de precarité pour un precariscore {p} 😱, fait le test et donne moi ton resultat 🤗",
   "start-form": "Démarrer le questionnaire",
   "thank-presentation": "Nous défendons les étudiant·e·s au quotidien, mais pour cela plus nous avons de chiffres plus on pourra visibiliser la hess des étudiants. Ce formulaire nous est très précieux 🤗",
-  "trueFalse.aprobation": "oui"
+  "trueFalse.aprobation": "oui",
+  "error-is-not-connected": "Erreur, vous n'avez pas encore de compte.",
+  "error-not-connected-description": "cela est sans doute car vous n'avez pas fini le formulaire",
+  "error-is-not-activist": "Erreur, vous devez être engagé pour accéder à cette page",
+  "error-not-activist-description": "C'est une page réservée aux personnes ayant demandé à être engagé dans cette campagne...",
+  "becam-activist": "Devenir engagé",
+  "welcome-in-pap": "Bienvenu en porte a porte",
+  "welcome-in-pap-description": "Ici tu peux gérer et créer des qrcode pour toutes les occasions où cela est nécessaire. Le porte à porte de ce soir par exemple 🤗",
+  "authenticate-from": "tu es identifié comme {name} {lastname} ({id})",
+  "new-qr-code-label": "Motif du nouveau qrcode",
+  "new-qr-code-help": "ce texte nous permettra de connaître l'origine de ces réponses",
+  "new-qr-code-placeholder": "Une résidence",
+  "create-new-invitation-link": "Créer un nouveau lien d'invitation",
+  "your-qr-code": "Votre qr code pour: {reason}"
 }

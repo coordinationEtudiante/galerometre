@@ -53,6 +53,7 @@ if (typeof value !== "undefined") {
   flex-direction: column;
   font-size: small;
   width: 100%;
+  gap: 1em;
   input {
     background-color: #f3f3f5;
     border: 1px solid #f3f3f5;

@@ -2,6 +2,7 @@
 
 import type { pageType } from "@/types/request";
 import { getLocalResponse, uid } from "./jsTools";
+import { ref } from "vue";
 
 class RequestManager {
   private static instance: RequestManager;
@@ -16,6 +17,19 @@ class RequestManager {
     afiliation: string | undefined;
   };
 
+  private customQR = ref<
+    Array<{
+      id: string;
+      location: string;
+      email: string;
+      phone: string;
+      name: string;
+      lastname: string;
+      activist: true;
+      afiliation: string;
+      reason: string;
+    }>
+  >([]);
   link: string;
 
   private dependencyQuestion: Array<{
@@ -51,9 +65,9 @@ class RequestManager {
     };
 
     this.updateUser(JSON.parse(window.localStorage.getItem("user") ?? "{}"));
-
-    this.link =
-      import.meta.env.VITE_API_URL ?? "https://api.precariscore.qamp.fr";
+    this.customQR.value =
+      JSON.parse(window.localStorage.getItem("customQR") ?? "[]") ?? [];
+    this.link = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000";
   }
 
   async createAccont(
@@ -72,7 +86,7 @@ class RequestManager {
 
     const existingId = window.localStorage.getItem("account_created");
     if (existingId === this.user.id) {
-      await this.dependency();
+      this.dependency();
       return true;
     }
 
@@ -93,11 +107,11 @@ class RequestManager {
 
     if (response.status === 200) {
       window.localStorage.setItem("account_created", this.user.id);
-      await this.dependency();
+      this.dependency();
       return true;
     }
 
-    await this.dependency();
+    this.dependency();
     return false;
   }
 
@@ -154,7 +168,7 @@ class RequestManager {
     }
 
     const result = JSON.parse(JSON.parse(request.responseText));
-    const dependency = this.dependencyQuestion;
+    const dependency = this.dependency();
     // consolidate dependencies
     const localDependency: {
       questionToShowID: number;
@@ -237,21 +251,19 @@ class RequestManager {
     return { question: result, localDependency };
   }
 
-  async dependency() {
+  dependency() {
     if (this.dependencyQuestion.length > 0) return this.dependencyQuestion;
 
-    const response = await fetch(this.link + `/rest/dependency`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const request = new XMLHttpRequest();
+    request.open("GET", this.link + `/rest/dependency`, false);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send();
 
-    const result = await response.json();
-    if (response.status == 200) {
-      this.dependencyQuestion = JSON.parse(result);
-      return this.dependencyQuestion;
+    if (request.status === 200) {
+      this.dependencyQuestion = JSON.parse(request.responseText);
     }
+
+    return this.dependencyQuestion;
   }
 
   sendResponse(
@@ -309,8 +321,82 @@ class RequestManager {
     return JSON.parse(JSON.parse(request.responseText));
   }
 
+  createCustomQrcode(reason: string) {
+    if (
+      this.user.location === undefined ||
+      this.user.email === undefined ||
+      this.user.phone === undefined ||
+      this.user.name === undefined ||
+      this.user.lastname === undefined
+    ) {
+      console.log(
+        this.user.location === undefined,
+        this.user.email === undefined,
+        this.user.phone === undefined,
+        this.user.name === undefined,
+        this.user.lastname === undefined
+      );
+      return false;
+    }
+
+    const qrUID = uid();
+    this.customQR.value.push({
+      location: this.user.location,
+      email: this.user.email,
+      phone: this.user.phone,
+      name: this.user.name,
+      lastname: this.user.lastname,
+      afiliation: this.user.id,
+      activist: true,
+      id: qrUID,
+      reason,
+    });
+
+    window.localStorage.setItem(
+      "customQR",
+      JSON.stringify(this.customQR.value)
+    );
+
+    const request = new XMLHttpRequest();
+    request.open("POST", this.link + "/rest/respondent", false);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(
+      JSON.stringify({
+        location: this.user.location,
+        email: this.user.email,
+        phone: this.user.phone,
+        name: this.user.name,
+        lastname: this.user.lastname,
+        afiliation: this.user.id,
+        activist: "true",
+        resp_id: qrUID,
+        place_filled: reason,
+        id_from: this.user.id,
+        camp_id: "001",
+      })
+    );
+
+    return qrUID;
+  }
+
   getId() {
     return this.user.id;
+  }
+
+  getActivist() {
+    return this.user.activist;
+  }
+
+  getName() {
+    return this.user.name;
+  }
+
+  getLasname() {
+    return this.user.lastname;
+  }
+
+  getCustomQRs() {
+    return this.customQR;
   }
 
   private updateUser(obj: Record<string, string>) {

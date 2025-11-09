@@ -6,7 +6,7 @@
       <FormSearch
         :label="t('form-registration-university')"
         :searchList="universityLocation"
-        @input="(e) => (location = e)"
+        @input="(e: string) => (location = e)"
         other
         :errored="requiredOnSubmit && location === ''"
       />
