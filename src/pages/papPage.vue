@@ -60,7 +60,7 @@
       id !== undefined
     "
   >
-    <div>{{ t("your-qr-code", { reason: selectedQr.reason }) }}</div>
+    <h1>{{ t("your-qr-code", { reason: selectedQr.reason }) }}</h1>
     <img
       :src="qrcode"
       :alt="`https://precariscore.qamp.fr/#/${selectedQr.id}`"
@@ -166,6 +166,7 @@ function createNewLink() {
       padding: 10px;
       display: flex;
       gap: 1em;
+      border-radius: 5px;
 
       span:nth-child(2) {
         overflow: hidden;
