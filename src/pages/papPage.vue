@@ -21,7 +21,10 @@
     <div>{{ t("welcome-in-pap-description") }}</div>
     <div>{{ t("authenticate-from", { name, lastName, id }) }}</div>
   </div>
-  <div class="page">
+  <div
+    class="page"
+    v-if="name !== undefined && lastName !== undefined && id !== undefined"
+  >
     <ul v-if="customQRs.length > 0" class="qrList">
       <li
         v-for="qr in customQRs"
