@@ -87,7 +87,7 @@ class RequestManager {
 
     const existingId = window.localStorage.getItem("account_created");
     if (existingId === this.user.id) {
-      await this.dependency();
+      this.dependency();
       return true;
     }
 
@@ -108,11 +108,11 @@ class RequestManager {
 
     if (response.status === 200) {
       window.localStorage.setItem("account_created", this.user.id);
-      await this.dependency();
+      this.dependency();
       return true;
     }
 
-    await this.dependency();
+    this.dependency();
     return false;
   }
 
@@ -169,7 +169,7 @@ class RequestManager {
     }
 
     const result = JSON.parse(JSON.parse(request.responseText));
-    const dependency = this.dependencyQuestion;
+    const dependency = this.dependency();
     // consolidate dependencies
     const localDependency: {
       questionToShowID: number;
@@ -252,21 +252,19 @@ class RequestManager {
     return { question: result, localDependency };
   }
 
-  async dependency() {
+  dependency() {
     if (this.dependencyQuestion.length > 0) return this.dependencyQuestion;
 
-    const response = await fetch(this.link + `/rest/dependency`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const request = new XMLHttpRequest();
+    request.open("GET", this.link + `/rest/dependency`, false);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send();
 
-    const result = await response.json();
-    if (response.status == 200) {
-      this.dependencyQuestion = JSON.parse(result);
-      return this.dependencyQuestion;
+    if (request.status === 200) {
+      this.dependencyQuestion = JSON.parse(request.responseText);
     }
+
+    return this.dependencyQuestion;
   }
 
   sendResponse(
@@ -358,6 +356,25 @@ class RequestManager {
     window.localStorage.setItem(
       "customQR",
       JSON.stringify(this.customQR.value)
+    );
+
+    const request = new XMLHttpRequest();
+    request.open("POST", this.link + "/rest/respondent", false);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(
+      JSON.stringify({
+        location: this.user.location,
+        email: this.user.email,
+        phone: this.user.phone,
+        name: this.user.name,
+        lastname: this.user.lastname,
+        afiliation: this.user.id,
+        activist: "true",
+        resp_id: qrUID,
+        place_filled: reason,
+        id_from: this.user.id,
+        camp_id: "001",
+      })
     );
 
     return qrUID;
