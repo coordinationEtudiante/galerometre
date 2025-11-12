@@ -261,8 +261,9 @@ class RequestManager {
     request.send();
 
     if (request.status === 200) {
-      this.dependencyQuestion = JSON.parse(request.responseText);
+      this.dependencyQuestion = JSON.parse(JSON.parse(request.responseText));
     }
+    console.log(this.dependencyQuestion);
 
     return this.dependencyQuestion;
   }
