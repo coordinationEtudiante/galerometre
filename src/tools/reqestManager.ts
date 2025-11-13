@@ -311,16 +311,20 @@ class RequestManager {
   }
 
   score() {
-    const request = new XMLHttpRequest();
-    request.open("GET", this.link + `/rest/score/${this.user.id}`, false);
-    request.setRequestHeader("Content-Type", "application/json");
-    request.send();
+    try {
+      const request = new XMLHttpRequest();
+      request.open("GET", this.link + `/rest/score/${this.user.id}`, false);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.send();
 
-    if (request.status != 200) {
-      return -1;
+      if (request.status != 200) {
+        return undefined;
+      }
+
+      return JSON.parse(JSON.parse(request.responseText));
+    } catch {
+      return undefined;
     }
-
-    return JSON.parse(JSON.parse(request.responseText));
   }
 
   createCustomQrcode(reason: string) {

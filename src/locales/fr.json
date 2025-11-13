@@ -50,5 +50,7 @@
   "new-qr-code-help": "ce texte nous permettra de connaître l'origine de ces réponses",
   "new-qr-code-placeholder": "Une résidence",
   "create-new-invitation-link": "Créer un nouveau lien d'invitation",
-  "your-qr-code": "Votre qr code pour: {reason}"
+  "your-qr-code": "Votre qr code pour: {reason}",
+  "error-is-not-finish": "Vous n'avez pas fini le formulaire. Revenez plus tard...",
+  "error-is-not-finish-description": "cette page vous peremetera de visualiser votre score. mais il faut pour cella que tu est fini le formulaire"
 }
