@@ -97,10 +97,13 @@ function next() {
   flex-direction: column;
   gap: 2vh;
 
+  h1 {
+    text-align: center;
+  }
+
   h1,
   p {
     margin: 0 auto;
-    text-align: center;
   }
 
   p {

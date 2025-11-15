@@ -14,7 +14,7 @@ import FooterBar from "./components/footerBar.vue";
 .app {
   background-color: #f5f5f5;
   display: flex;
-  height: 100%;
+  min-height: 100%;
   flex-direction: column;
   justify-content: space-between;
 }

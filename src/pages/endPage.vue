@@ -48,7 +48,6 @@ if (score.value && score.value.result > 0) {
   window.localStorage.setItem("score", score.value.result);
 }
 
-// Fonction pour obtenir le chemin de l'image en fonction du score
 function getPrecariscoreImage(scoreLabel: string) {
   return new URL(`../assets/Precarisocre-${scoreLabel}.jpeg`, import.meta.url)
     .href;

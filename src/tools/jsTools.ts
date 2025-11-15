@@ -98,6 +98,11 @@ function phoneNumberCheck(phone: string): boolean {
   return false;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getRandom(array: Array<any>) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 export {
   uid,
   saveResponse,
@@ -105,4 +110,5 @@ export {
   scoreToPrecariscore,
   clearPhone,
   phoneNumberCheck,
+  getRandom,
 };
