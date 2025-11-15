@@ -5,7 +5,7 @@
   <template v-else>
     <div class="constructPage">
       <div class="page">
-        <UiProgress :max="8" :steps="page"></UiProgress>
+        <UiProgress :max="8" :steps="vPage"></UiProgress>
       </div>
       <div class="page">
         <h1 v-if="questionData.data.name" class="title">
@@ -106,7 +106,12 @@
             />
           </template>
         </template>
-        <UiLink @click="next">{{ t("next-pages") }}</UiLink>
+        <div class="links">
+          <UiLink :active="vPage > 1" @click="prev">{{
+            t("previous-pages")
+          }}</UiLink>
+          <UiLink @click="next">{{ t("next-pages") }}</UiLink>
+        </div>
       </div>
     </div>
   </template>
@@ -122,12 +127,10 @@ import UiProgress from "@/components/ui/UiProgress.vue";
 import { saveResponse } from "@/tools/jsTools";
 import reqestManager from "@/tools/reqestManager";
 import type { pageType } from "@/types/request";
-import { computed, onMounted, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
 
-const route = useRoute();
-const router = useRouter();
+import { onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
 const { locale, t } = useI18n();
 
 const pageLine = [
@@ -142,11 +145,11 @@ const pageLine = [
   [8, Infinity],
 ];
 
+const vPage = ref(1); // page dynamique locale
+
 const requiredOnSubmit = ref(false);
 const response = ref<{ id: number | string; answer: string }[]>([]);
 const fieldVisibility = ref<Record<number, boolean>>({});
-
-const page = computed(() => Number(route.params.page));
 
 type LocalDependency = {
   questionToShowID: number;
@@ -160,7 +163,7 @@ const questionData = ref<{
 
 function loadQuestionData() {
   try {
-    const result = reqestManager.questions(locale.value, page.value);
+    const result = reqestManager.questions(locale.value, vPage.value);
     if (!result || !result.question) {
       questionData.value = { data: undefined, localDependency: undefined };
       return;
@@ -240,17 +243,30 @@ function next() {
       return;
     }
 
-    const nextPage = pageLine.find((e) => e[0] === Number(page.value))?.[1];
+    const nextPage = pageLine.find((e) => e[0] === Number(vPage.value))?.[1];
     if (nextPage == Infinity) {
-      router.push({ path: `/register` });
+      // Navigation finale, ici on peut afficher un message ou déclencher une action
+      // Par exemple, afficher une page de remerciement ou un résumé
+      // Pour l'instant, on bloque à la dernière page
       return;
     }
 
-    router.push({ path: `/page/${nextPage ?? 1}` });
+    vPage.value = nextPage ?? vPage.value + 1;
+    requiredOnSubmit.value = false;
+    loadQuestionData();
   } catch (error) {
     console.error("Error processing next:", error);
     alert("An error occurred. Please try again.");
   }
+}
+
+function prev() {
+  if (vPage.value <= 1) return;
+  const prevPage = pageLine.find((e) => e[1] === vPage.value)?.[0];
+  if (prevPage === -Infinity || prevPage === undefined) return;
+  vPage.value = prevPage;
+  requiredOnSubmit.value = false;
+  loadQuestionData();
 }
 
 onMounted(() => {
@@ -259,7 +275,7 @@ onMounted(() => {
 });
 
 watch(
-  () => [page.value, locale.value],
+  () => [vPage.value, locale.value],
   () => {
     requiredOnSubmit.value = false;
     loadQuestionData();
@@ -282,6 +298,11 @@ watch(
 
     h1 {
       text-align: center;
+    }
+
+    .links {
+      display: flex;
+      justify-content: space-between;
     }
   }
 }
