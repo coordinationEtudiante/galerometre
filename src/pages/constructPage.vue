@@ -108,9 +108,9 @@
         </template>
         <div class="links">
           <UiLink :active="vPage > 1" @click="prev">{{
-            t("previous-pages")
+            t("previous-page")
           }}</UiLink>
-          <UiLink @click="next">{{ t("next-pages") }}</UiLink>
+          <UiLink @click="next">{{ t("next-page") }}</UiLink>
         </div>
       </div>
     </div>
@@ -127,11 +127,12 @@ import UiProgress from "@/components/ui/UiProgress.vue";
 import { saveResponse } from "@/tools/jsTools";
 import reqestManager from "@/tools/reqestManager";
 import type { pageType } from "@/types/request";
-
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const { locale, t } = useI18n();
+const router = useRouter();
 
 const pageLine = [
   [-Infinity, 1],
@@ -245,9 +246,7 @@ function next() {
 
     const nextPage = pageLine.find((e) => e[0] === Number(vPage.value))?.[1];
     if (nextPage == Infinity) {
-      // Navigation finale, ici on peut afficher un message ou déclencher une action
-      // Par exemple, afficher une page de remerciement ou un résumé
-      // Pour l'instant, on bloque à la dernière page
+      router.push({ path: `/register` });
       return;
     }
 

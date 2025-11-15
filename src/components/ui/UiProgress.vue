@@ -69,6 +69,7 @@ watch(
 .progress-container {
   display: flex;
   flex-direction: column;
+  gap: 2vh;
 
   .progress-bar-container {
     height: 25px;
