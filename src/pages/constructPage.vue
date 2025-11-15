@@ -2,106 +2,114 @@
   <div v-if="!questionData.data">
     <p>Error while loading the form</p>
   </div>
-  <div v-else class="page">
-    <h1 v-if="questionData.data.name" class="title">
-      {{ questionData.data.name }}
-    </h1>
-    <p v-if="questionData.data.description" class="subtitle">
-      {{ questionData.data.description }}
-    </p>
-    <template v-for="field in questionData.data.fields" :key="field.qu_id">
-      <template
-        v-if="
-          field.qu_format === 'text' && fieldVisibility[field.qu_id] != false
-        "
-      >
-        <FormInput
-          :label="field.qu_text"
-          type="text"
-          @input="updateAnswer(field.qu_id, $event)"
-          :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
-          :help="field.help"
-        />
-      </template>
-      <template
-        v-else-if="
-          (field.qu_format === 'number' ||
-            (field.qu_format as any) === 'delay') &&
-          fieldVisibility[field.qu_id] != false
-        "
-      >
-        <FormInput
-          :label="field.qu_text"
-          type="number"
-          @input="updateAnswer(field.qu_id, $event)"
-          :errored="requiredOnSubmit && getAnswer(field.qu_id) == undefined"
-          :help="field.help"
-        />
-      </template>
-      <template
-        v-else-if="
-          field.qu_format === 'select' &&
-          field.qu_issues &&
-          fieldVisibility[field.qu_id] != false
-        "
-      >
-        <FormSelect
-          :label="field.qu_text"
-          :options="
-            Object.entries(field.qu_issues).map(([key, label]) => ({
-              label: label as string,
-              value: String(Number(key) + 1),
-            }))
-          "
-          other
-          @input="updateAnswer(field.qu_id, $event)"
-          :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
-          :help="field.help"
-        />
-      </template>
-      <template
-        v-else-if="
-          field.qu_format === 'radio' &&
-          field.qu_issues &&
-          fieldVisibility[field.qu_id] != false
-        "
-      >
-        <FormRadio
-          :label="field.qu_text"
-          :options="
-            Object.entries(field.qu_issues).map(([key, label]) => ({
-              label: label as string,
-              value: String(Number(key) + 1),
-            }))
-          "
-          @input="updateAnswer(field.qu_id, $event)"
-          :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
-          :help="field.help"
-        />
-      </template>
-      <template
-        v-else-if="
-          field.qu_format === 'true_false' &&
-          field.qu_issues &&
-          fieldVisibility[field.qu_id] != false
-        "
-      >
-        <FormTrueFalse
-          :label="field.qu_text"
-          :options="
-            Object.entries(field.qu_issues).map(([key, label]) => ({
-              label: label as string,
-              value: String(Number(key) + 1),
-            }))
-          "
-          @input="updateAnswer(field.qu_id, $event)"
-          :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
-          :help="field.help"
-        />
-      </template>
-    </template>
-    <UiLink @click="next">{{ t("next-pages") }}</UiLink>
-  </div>
+  <template v-else>
+    <div class="constructPage">
+      <div class="page">
+        <UiProgress :max="8" :steps="page"></UiProgress>
+      </div>
+      <div class="page">
+        <h1 v-if="questionData.data.name" class="title">
+          {{ questionData.data.name }}
+        </h1>
+        <p v-if="questionData.data.description" class="subtitle">
+          {{ questionData.data.description }}
+        </p>
+        <template v-for="field in questionData.data.fields" :key="field.qu_id">
+          <template
+            v-if="
+              field.qu_format === 'text' &&
+              fieldVisibility[field.qu_id] != false
+            "
+          >
+            <FormInput
+              :label="field.qu_text"
+              type="text"
+              @input="updateAnswer(field.qu_id, $event)"
+              :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
+              :help="field.help"
+            />
+          </template>
+          <template
+            v-else-if="
+              (field.qu_format === 'number' ||
+                (field.qu_format as any) === 'delay') &&
+              fieldVisibility[field.qu_id] != false
+            "
+          >
+            <FormInput
+              :label="field.qu_text"
+              type="number"
+              @input="updateAnswer(field.qu_id, $event)"
+              :errored="requiredOnSubmit && getAnswer(field.qu_id) == undefined"
+              :help="field.help"
+            />
+          </template>
+          <template
+            v-else-if="
+              field.qu_format === 'select' &&
+              field.qu_issues &&
+              fieldVisibility[field.qu_id] != false
+            "
+          >
+            <FormSelect
+              :label="field.qu_text"
+              :options="
+                Object.entries(field.qu_issues).map(([key, label]) => ({
+                  label: label as string,
+                  value: String(Number(key) + 1),
+                }))
+              "
+              other
+              @input="updateAnswer(field.qu_id, $event)"
+              :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
+              :help="field.help"
+            />
+          </template>
+          <template
+            v-else-if="
+              field.qu_format === 'radio' &&
+              field.qu_issues &&
+              fieldVisibility[field.qu_id] != false
+            "
+          >
+            <FormRadio
+              :label="field.qu_text"
+              :options="
+                Object.entries(field.qu_issues).map(([key, label]) => ({
+                  label: label as string,
+                  value: String(Number(key) + 1),
+                }))
+              "
+              @input="updateAnswer(field.qu_id, $event)"
+              :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
+              :help="field.help"
+            />
+          </template>
+          <template
+            v-else-if="
+              field.qu_format === 'true_false' &&
+              field.qu_issues &&
+              fieldVisibility[field.qu_id] != false
+            "
+          >
+            <FormTrueFalse
+              :label="field.qu_text"
+              :options="
+                Object.entries(field.qu_issues).map(([key, label]) => ({
+                  label: label as string,
+                  value: String(Number(key) + 1),
+                }))
+              "
+              @input="updateAnswer(field.qu_id, $event)"
+              :errored="requiredOnSubmit && !getAnswer(field.qu_id)"
+              :help="field.help"
+            />
+          </template>
+        </template>
+        <UiLink @click="next">{{ t("next-pages") }}</UiLink>
+      </div>
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -110,6 +118,7 @@ import FormRadio from "@/components/formElement/FormRadio.vue";
 import FormSelect from "@/components/formElement/FormSelect.vue";
 import FormTrueFalse from "@/components/formElement/FormTrueFalse.vue";
 import UiLink from "@/components/ui/uiLink.vue";
+import UiProgress from "@/components/ui/UiProgress.vue";
 import { saveResponse } from "@/tools/jsTools";
 import reqestManager from "@/tools/reqestManager";
 import type { pageType } from "@/types/request";
@@ -137,7 +146,7 @@ const requiredOnSubmit = ref(false);
 const response = ref<{ id: number | string; answer: string }[]>([]);
 const fieldVisibility = ref<Record<number, boolean>>({});
 
-const page = computed(() => route.params.page);
+const page = computed(() => Number(route.params.page));
 
 type LocalDependency = {
   questionToShowID: number;
@@ -151,7 +160,7 @@ const questionData = ref<{
 
 function loadQuestionData() {
   try {
-    const result = reqestManager.questions(locale.value, Number(page.value));
+    const result = reqestManager.questions(locale.value, page.value);
     if (!result || !result.question) {
       questionData.value = { data: undefined, localDependency: undefined };
       return;
@@ -259,18 +268,21 @@ watch(
 </script>
 
 <style lang="css" scoped>
-.page {
-  margin: 2vh;
-  padding: 2vh;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  background-color: white;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 2vh;
+.constructPage {
+  height: 100%;
+  .page {
+    margin: 2vh;
+    padding: 2vh;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
 
-  h1 {
-    text-align: center;
+    h1 {
+      text-align: center;
+    }
   }
 }
 </style>

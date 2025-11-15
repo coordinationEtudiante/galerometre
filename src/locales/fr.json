@@ -52,5 +52,6 @@
   "create-new-invitation-link": "Créer un nouveau lien d'invitation",
   "your-qr-code": "Votre qr code pour: {reason}",
   "error-is-not-finish": "Vous n'avez pas fini le formulaire. Revenez plus tard...",
-  "error-is-not-finish-description": "cette page vous peremetera de visualiser votre score. mais il faut pour cella que tu est fini le formulaire"
+  "error-is-not-finish-description": "cette page vous peremetera de visualiser votre score. mais il faut pour cella que tu est fini le formulaire",
+  "progress.progression": "tu est à l'etape: {steps} sur {max}"
 }
