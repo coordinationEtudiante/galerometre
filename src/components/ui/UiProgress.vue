@@ -4,7 +4,10 @@
       <div
         class="progress-bar-indicator"
         :style="{ width: (steps / max) * 100 + '%' }"
-      ></div>
+      />
+      <div class="motivationIcon">
+        {{ getRandom(motivationIcon.get(steps) ?? ["🔥"]) }}
+      </div>
     </div>
     <div class="progress-info">
       {{ t("progress.progression", { max, steps }) }}
@@ -13,14 +16,29 @@
 </template>
 
 <script setup lang="ts">
+import { getRandom } from "@/tools/jsTools";
 import { useI18n } from "vue-i18n";
 
-defineProps<{
+const { steps } = defineProps<{
   max: number;
   steps: number;
 }>();
 
 const { t } = useI18n();
+const motivationIcon = new Map<number, string[]>();
+
+motivationIcon.set(1, ["🙏", "😱", "🤷‍♂️"]);
+motivationIcon.set(2, ["🌊", "🧔", "👩‍🦰"]);
+motivationIcon.set(3, ["🚀", "💪", "👨‍💻"]);
+motivationIcon.set(4, ["🤝", "📋", "🎉"]);
+motivationIcon.set(5, ["🌈", "🔥", "🔪"]);
+motivationIcon.set(6, ["💭", "🗣️", "🤝"]);
+motivationIcon.set(7, ["🎉", "🤯", "🙂‍↕️"]);
+motivationIcon.set(8, ["❤️", "😍", "🫵"]);
+
+const currentIcons = motivationIcon.get(steps) ?? ["🔥"];
+console.log(currentIcons);
+console.log(getRandom(currentIcons));
 </script>
 
 <style lang="scss" scoped>
@@ -34,6 +52,12 @@ const { t } = useI18n();
     background: whitesmoke;
     position: relative;
     border-radius: 25px;
+    display: flex;
+
+    .motivationIcon {
+      margin-left: -1em;
+      z-index: 9;
+    }
   }
 
   .progress-bar-indicator {
