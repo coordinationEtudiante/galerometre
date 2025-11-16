@@ -278,6 +278,7 @@ watch(
   () => {
     requiredOnSubmit.value = false;
     loadQuestionData();
+    window.scrollTo(0, 0);
   }
 );
 </script>
