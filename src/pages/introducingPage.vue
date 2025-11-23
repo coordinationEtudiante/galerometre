@@ -11,7 +11,7 @@
         :errored="requiredOnSubmit && location === ''"
       />
     </div>
-    <UiLink @click="next">{{ t("next-pages") }}</UiLink>
+    <UiLink @click="next">{{ t("next-page") }}</UiLink>
   </div>
 </template>
 

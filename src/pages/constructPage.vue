@@ -146,7 +146,7 @@ const pageLine = [
   [8, Infinity],
 ];
 
-const vPage = ref(1); // page dynamique locale
+const vPage = ref(1);
 
 const requiredOnSubmit = ref(false);
 const response = ref<{ id: number | string; answer: string }[]>([]);
