@@ -36,6 +36,18 @@ export const router = createRouter({
   },
 });
 
+// Redirect to home if account not created
+router.beforeEach((to, from, next) => {
+  const accountCreated = localStorage.getItem("account_created");
+  const isHomePage = to.path === "/" || to.path.match(/^\/\w{16}$/);
+
+  if (!accountCreated && !isHomePage) {
+    next("/");
+  } else {
+    next();
+  }
+});
+
 const app = createApp(App);
 
 const browserLanguage = navigator.language.split("-")[0];
