@@ -42,6 +42,7 @@ router.beforeEach((to, from, next) => {
   const isHomePage = to.path === "/" || to.path.match(/^\/\w{16}$/);
 
   if (!accountCreated && !isHomePage) {
+    localStorage.clear();
     next("/");
   } else {
     next();
