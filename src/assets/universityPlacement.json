@@ -104,6 +104,32 @@
     ]
   },
   {
+    "label": "Université Lyon2",
+    "value": [
+      "lyon",
+      "villeurbanne",
+      "saint-etienne",
+      "bourg-en-bresse",
+      "vienne",
+      "Lyon 2",
+      "Université ComUE Lyon",
+      "Université Lyon2"
+    ]
+  },
+  {
+    "label": "Université Lyon3",
+    "value": [
+      "lyon",
+      "villeurbanne",
+      "saint-etienne",
+      "bourg-en-bresse",
+      "vienne",
+      "Lyon 3",
+      "Université ComUE Lyon",
+      "Université Lyon3"
+    ]
+  },
+  {
     "label": "Université Côte d'Azur",
     "value": [
       "nice",
