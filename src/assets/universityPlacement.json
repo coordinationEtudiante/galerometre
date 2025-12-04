@@ -91,14 +91,16 @@
     ]
   },
   {
-    "label": "Université ComUE Lyon",
+    "label": "Université Lyon1",
     "value": [
       "lyon",
       "villeurbanne",
       "saint-etienne",
       "bourg-en-bresse",
       "vienne",
-      "Université ComUE Lyon"
+      "Lyon 1",
+      "Université ComUE Lyon",
+      "Université Lyon1"
     ]
   },
   {
